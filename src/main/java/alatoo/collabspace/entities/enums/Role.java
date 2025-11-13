@@ -1,4 +1,4 @@
-package alatoo.collabspace.entities;
+package alatoo.collabspace.entities.enums;
 
 public enum Role {
     ADMIN,

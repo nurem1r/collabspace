@@ -1,5 +1,6 @@
 package alatoo.collabspace.entities;
 
+import alatoo.collabspace.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
