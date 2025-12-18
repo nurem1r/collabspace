@@ -1,7 +1,7 @@
 package alatoo.collabspace.services.impl;
 
 import alatoo.collabspace.dto.ProjectRequiredRoleDto;
-import alatoo.collabspace.entities.Project;
+import alatoo. collabspace.entities.Project;
 import alatoo.collabspace.entities.ProjectRequiredRole;
 import alatoo.collabspace.exception.NotFoundException;
 import alatoo.collabspace.mappers.ProjectRequiredRoleMapper;
@@ -9,6 +9,8 @@ import alatoo.collabspace.repositories.ProjectRepository;
 import alatoo.collabspace.repositories.ProjectRequiredRoleRepository;
 import alatoo.collabspace.services.ProjectRequiredRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class ProjectRequiredRoleServiceImpl implements ProjectRequiredRoleServic
         ProjectRequiredRole entity = mapper.toEntity(dto);
         Project project = projectRepository.findById(dto.getProjectId()).orElseThrow(() -> new NotFoundException("Project not found"));
         entity.setProject(project);
-        ProjectRequiredRole saved = repo.save(entity);
+        ProjectRequiredRole saved = repo. save(entity);
         return mapper.toDto(saved);
     }
 
@@ -46,6 +48,12 @@ public class ProjectRequiredRoleServiceImpl implements ProjectRequiredRoleServic
                 .filter(pr -> pr.getProject().getId().equals(projectId))
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProjectRequiredRoleDto> listAllPaged(Pageable pageable) {
+        return repo.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
