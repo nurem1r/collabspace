@@ -2,8 +2,8 @@ package alatoo.collabspace.services.impl;
 
 import alatoo.collabspace. dto.DashboardStatsDto;
 import alatoo.collabspace.dto.UserDashboardDto;
-import alatoo.collabspace.entities.ApplicationStatus;
-import alatoo. collabspace.entities.ProjectStatus;
+import alatoo.collabspace.entities.enums.ApplicationStatus;
+import alatoo. collabspace.entities.enums.ProjectStatus;
 import alatoo. collabspace.exception.NotFoundException;
 import alatoo.collabspace.repositories.*;
 import alatoo.collabspace.services.DashboardService;
