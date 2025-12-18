@@ -2,15 +2,18 @@ package alatoo.collabspace.services.impl;
 
 import alatoo.collabspace.dto.AchievementDto;
 import alatoo.collabspace.entities.Achievement;
-import alatoo.collabspace.entities.Skill;
-import alatoo.collabspace.exception.NotFoundException;
+import alatoo.collabspace.entities.enums.AchievementSource;
+import alatoo.collabspace.entities. Skill;
+import alatoo. collabspace.exception.NotFoundException;
 import alatoo.collabspace.mappers.AchievementMapper;
 import alatoo.collabspace.repositories.AchievementRepository;
 import alatoo.collabspace.repositories.SkillRepository;
 import alatoo.collabspace.services.AchievementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework. data.domain.Page;
+import org.springframework.data.domain. Pageable;
+import org. springframework.stereotype.Service;
+import org.springframework.transaction.annotation. Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +33,7 @@ public class AchievementServiceImpl implements AchievementService {
         if (dto.getSkillId() != null) {
             Skill skill = skillRepository.findById(dto.getSkillId())
                     .orElseThrow(() -> new NotFoundException("Skill not found"));
-            entity.setSkill(skill);
+            entity. setSkill(skill);
         }
         Achievement saved = achievementRepository.save(entity);
         return achievementMapper.toDto(saved);
@@ -50,6 +53,12 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<AchievementDto> listAllPaged(Pageable pageable) {
+        return achievementRepository.findAll(pageable).map(achievementMapper::toDto);
+    }
+
+    @Override
     @Transactional
     public AchievementDto update(Long id, AchievementDto dto) {
         Achievement entity = achievementRepository.findById(id).orElseThrow(() -> new NotFoundException("Achievement not found"));
@@ -62,7 +71,7 @@ public class AchievementServiceImpl implements AchievementService {
         } else {
             entity.setSkill(null);
         }
-        Achievement updated = achievementRepository.save(entity);
+        Achievement updated = achievementRepository. save(entity);
         return achievementMapper.toDto(updated);
     }
 
@@ -70,5 +79,23 @@ public class AchievementServiceImpl implements AchievementService {
     @Transactional
     public void delete(Long id) {
         achievementRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AchievementDto> searchAchievements(AchievementSource source, Long skillId) {
+        return achievementRepository.findAll().stream()
+                .filter(achievement -> {
+                    boolean matches = true;
+                    if (source != null) {
+                        matches = achievement.getSource() == source;
+                    }
+                    if (skillId != null) {
+                        matches = matches && (achievement.getSkill() != null && achievement.getSkill().getId().equals(skillId));
+                    }
+                    return matches;
+                })
+                .map(achievementMapper::toDto)
+                .collect(Collectors. toList());
     }
 }
