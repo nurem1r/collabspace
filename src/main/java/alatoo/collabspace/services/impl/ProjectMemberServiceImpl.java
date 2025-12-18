@@ -1,21 +1,23 @@
 package alatoo.collabspace.services.impl;
 
-import alatoo.collabspace.dto.ProjectMemberDto;
+import alatoo.collabspace.dto. ProjectMemberDto;
 import alatoo.collabspace.entities.Project;
 import alatoo.collabspace.entities.ProjectMember;
 import alatoo.collabspace.entities.User;
-import alatoo.collabspace.exception.NotFoundException;
-import alatoo.collabspace.mappers.ProjectMemberMapper;
-import alatoo.collabspace.repositories.ProjectMemberRepository;
+import alatoo.collabspace.exception. NotFoundException;
+import alatoo. collabspace.mappers.ProjectMemberMapper;
+import alatoo.collabspace.repositories. ProjectMemberRepository;
 import alatoo.collabspace.repositories.ProjectRepository;
-import alatoo.collabspace.repositories.UserRepository;
+import alatoo. collabspace.repositories.UserRepository;
 import alatoo.collabspace.services.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain. Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation. Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java. util.List;
+import java. util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +49,16 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
     @Override
     @Transactional(readOnly = true)
     public List<ProjectMemberDto> listByProject(Long projectId) {
-        return projectMemberRepository.findAll().stream()
+        return projectMemberRepository. findAll().stream()
                 .filter(pm -> pm.getProject().getId().equals(projectId))
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProjectMemberDto> listAllPaged(Pageable pageable) {
+        return projectMemberRepository.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
