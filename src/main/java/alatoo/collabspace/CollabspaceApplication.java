@@ -10,6 +10,4 @@ public class CollabspaceApplication {
         SpringApplication.run(CollabspaceApplication.class, args);
     }
 
-
-
 }
