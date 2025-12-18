@@ -27,9 +27,6 @@ public class UserAchievement {
     @Column(name = "awarded_at", nullable = false)
     private LocalDateTime awardedAt;
 
-    /**
-     * id пользователя, который верифицировал достижение (может быть null)
-     */
     @Column(name = "verified_by")
     private Long verifiedBy;
 

@@ -37,6 +37,4 @@ public class Achievement {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
-    public void setSource(AchievementSource source) {
-    }
 }
