@@ -1,10 +1,12 @@
 package alatoo.collabspace.controllers;
 
 import alatoo.collabspace.dto.ChatDto;
-import alatoo.collabspace.services.ChatService;
-import lombok.RequiredArgsConstructor;
+import alatoo.collabspace. services.ChatService;
+import lombok. RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org. springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,14 +21,24 @@ public class ChatController {
         return ResponseEntity.ok(service.create(dto));
     }
 
+    @PostMapping("/private")
+    public ResponseEntity<ChatDto> createPrivate(@RequestParam Long user1Id, @RequestParam Long user2Id) {
+        return ResponseEntity.ok(service. createPrivateChat(user1Id, user2Id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ChatDto> get(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+        return ResponseEntity. ok(service.getById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<ChatDto>> list() {
         return ResponseEntity.ok(service.listAll());
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<ChatDto>> listPaged(Pageable pageable) {
+        return ResponseEntity.ok(service. listAllPaged(pageable));
     }
 
     @DeleteMapping("/{id}")
