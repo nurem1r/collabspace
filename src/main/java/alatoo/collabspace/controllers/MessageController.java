@@ -1,12 +1,14 @@
 package alatoo.collabspace.controllers;
 
-import alatoo.collabspace.dto.MessageDto;
+import alatoo. collabspace.dto.MessageDto;
 import alatoo.collabspace.services.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web. bind.annotation.*;
 
-import java.util.List;
+import java. util.List;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -16,7 +18,7 @@ public class MessageController {
 
     @PostMapping
     public ResponseEntity<MessageDto> create(@RequestBody MessageDto dto) {
-        return ResponseEntity.ok(service.create(dto));
+        return ResponseEntity.ok(service. create(dto));
     }
 
     @GetMapping("/{id}")
@@ -29,9 +31,14 @@ public class MessageController {
         return ResponseEntity.ok(service.listByChat(chatId));
     }
 
+    @GetMapping("/chat/{chatId}/paged")
+    public ResponseEntity<Page<MessageDto>> listByChatPaged(@PathVariable Long chatId, Pageable pageable) {
+        return ResponseEntity.ok(service. listByChatPaged(chatId, pageable));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity. noContent().build();
     }
 }
