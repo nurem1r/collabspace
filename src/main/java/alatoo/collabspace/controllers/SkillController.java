@@ -3,8 +3,10 @@ package alatoo.collabspace.controllers;
 import alatoo.collabspace.dto.SkillDto;
 import alatoo.collabspace.services.SkillService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data. domain.Page;
+import org. springframework.data.domain.Pageable;
+import org.springframework. http.ResponseEntity;
+import org.springframework. web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class SkillController {
 
     @PostMapping
     public ResponseEntity<SkillDto> create(@RequestBody SkillDto dto) {
-        return ResponseEntity.ok(skillService.create(dto));
+        return ResponseEntity.ok(skillService. create(dto));
     }
 
     @GetMapping("/{id}")
@@ -26,12 +28,17 @@ public class SkillController {
 
     @GetMapping
     public ResponseEntity<List<SkillDto>> list() {
-        return ResponseEntity.ok(skillService.listAll());
+        return ResponseEntity. ok(skillService.listAll());
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<SkillDto>> listPaged(Pageable pageable) {
+        return ResponseEntity.ok(skillService.listAllPaged(pageable));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SkillDto> update(@PathVariable Long id, @RequestBody SkillDto dto) {
-        return ResponseEntity.ok(skillService.update(id, dto));
+        return ResponseEntity. ok(skillService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
