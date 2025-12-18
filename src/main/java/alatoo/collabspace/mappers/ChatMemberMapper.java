@@ -11,7 +11,7 @@ public interface ChatMemberMapper {
     @Mapping(source = "user.id", target = "userId")
     ChatMemberDto toDto(ChatMember entity);
 
-    @Mapping(source = "chatId", target = "chat. id")
+    @Mapping(source = "chatId", target = "chat.id")
     @Mapping(source = "userId", target = "user.id")
     ChatMember toEntity(ChatMemberDto dto);
 }
