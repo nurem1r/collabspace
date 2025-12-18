@@ -61,3 +61,4 @@ public class User {
         if (createdAt == null) createdAt = LocalDateTime.now();
     }
 }
+
