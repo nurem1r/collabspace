@@ -1,12 +1,14 @@
 package alatoo.collabspace.services.impl;
 
-import alatoo.collabspace.dto.SkillDto;
+import alatoo.collabspace. dto.SkillDto;
 import alatoo.collabspace.entities.Skill;
 import alatoo.collabspace.exception.NotFoundException;
 import alatoo.collabspace.mappers.SkillMapper;
 import alatoo.collabspace.repositories.SkillRepository;
-import alatoo.collabspace.services.SkillService;
+import alatoo.collabspace. services.SkillService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain. Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,21 +40,33 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional(readOnly = true)
     public List<SkillDto> listAll() {
-        return skillRepository.findAll().stream().map(skillMapper::toDto).collect(Collectors.toList());
+        return skillRepository.findAll().stream()
+                .map(skillMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<SkillDto> listAllPaged(Pageable pageable) {
+        return skillRepository. findAll(pageable).map(skillMapper::toDto);
     }
 
     @Override
     @Transactional
     public SkillDto update(Long id, SkillDto dto) {
-        Skill skill = skillRepository.findById(id).orElseThrow(() -> new NotFoundException("Skill not found"));
-        skill.setName(dto.getName());
+        Skill skill = skillRepository. findById(id)
+                .orElseThrow(() -> new NotFoundException("Skill not found"));
+        skill.setName(dto. getName());
         Skill updated = skillRepository.save(skill);
-        return skillMapper.toDto(updated);
+        return skillMapper. toDto(updated);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
+        if (! skillRepository.existsById(id)) {
+            throw new NotFoundException("Skill not found");
+        }
         skillRepository.deleteById(id);
     }
 }
