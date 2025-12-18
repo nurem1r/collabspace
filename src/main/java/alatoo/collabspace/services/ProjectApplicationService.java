@@ -1,7 +1,7 @@
 package alatoo.collabspace.services;
 
 import alatoo.collabspace.dto.ProjectApplicationDto;
-import alatoo.collabspace.entities.ApplicationStatus;
+import alatoo.collabspace.entities.enums.ApplicationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
