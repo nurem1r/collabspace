@@ -3,10 +3,12 @@ package alatoo.collabspace.controllers;
 import alatoo.collabspace.dto.ProjectRequiredRoleDto;
 import alatoo.collabspace.services.ProjectRequiredRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain. Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind. annotation.*;
 
-import java.util.List;
+import java.util. List;
 
 @RestController
 @RequestMapping("/api/project-required-roles")
@@ -26,12 +28,17 @@ public class ProjectRequiredRoleController {
 
     @GetMapping("/project/{projectId}")
     public ResponseEntity<List<ProjectRequiredRoleDto>> listByProject(@PathVariable Long projectId) {
-        return ResponseEntity.ok(service.listByProject(projectId));
+        return ResponseEntity. ok(service.listByProject(projectId));
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<ProjectRequiredRoleDto>> listPaged(Pageable pageable) {
+        return ResponseEntity.ok(service.listAllPaged(pageable));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectRequiredRoleDto> update(@PathVariable Long id, @RequestBody ProjectRequiredRoleDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(service. update(id, dto));
     }
 
     @DeleteMapping("/{id}")
