@@ -1,5 +1,6 @@
 package alatoo.collabspace.entities;
 
+import alatoo.collabspace.entities.enums.AchievementSource;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -34,5 +35,8 @@ public class Achievement {
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
+    }
+
+    public void setSource(AchievementSource source) {
     }
 }
