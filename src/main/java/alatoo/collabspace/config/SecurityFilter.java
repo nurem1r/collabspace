@@ -28,7 +28,7 @@ public class SecurityFilter {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/doctor/register", "/api/pages/doctor-register").hasRole("ADMIN")
                         .requestMatchers(WHITE_LIST_URL).permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(form -> form
                         .loginPage("/api/auth/login")

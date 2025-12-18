@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto create(UserDto dto, String rawPassword) {
         User user = userMapper.toEntity(dto);
-        user.setPasswordHash(passwordEncoder.encode(rawPassword));
         user.getRoles().add(Role.USER);
         User saved = userRepository.save(user);
         return userMapper.toDto(saved);
@@ -71,6 +70,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto update(Long id, UserDto dto) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setFaculty(dto.getFaculty());
