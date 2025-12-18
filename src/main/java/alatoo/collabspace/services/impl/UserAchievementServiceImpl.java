@@ -4,15 +4,17 @@ import alatoo.collabspace.dto.UserAchievementDto;
 import alatoo.collabspace.entities.Achievement;
 import alatoo.collabspace.entities.User;
 import alatoo.collabspace.entities.UserAchievement;
-import alatoo.collabspace.exception.NotFoundException;
+import alatoo. collabspace.exception.NotFoundException;
 import alatoo.collabspace.mappers.UserAchievementMapper;
 import alatoo.collabspace.repositories.AchievementRepository;
 import alatoo.collabspace.repositories.UserAchievementRepository;
 import alatoo.collabspace.repositories.UserRepository;
-import alatoo.collabspace.services.UserAchievementService;
+import alatoo.collabspace.services. UserAchievementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework. data.domain.Page;
+import org.springframework.data.domain. Pageable;
+import org. springframework.stereotype.Service;
+import org.springframework.transaction.annotation. Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,13 +43,28 @@ public class UserAchievementServiceImpl implements UserAchievementService {
     @Override
     @Transactional(readOnly = true)
     public UserAchievementDto getById(Long id) {
-        return userAchievementRepository.findById(id).map(mapper::toDto).orElseThrow(() -> new NotFoundException("UserAchievement not found"));
+        return userAchievementRepository. findById(id).map(mapper::toDto).orElseThrow(() -> new NotFoundException("UserAchievement not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UserAchievementDto> listAll() {
         return userAchievementRepository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserAchievementDto> listAllPaged(Pageable pageable) {
+        return userAchievementRepository.findAll(pageable).map(mapper::toDto);
+    }
+
+    @Override
+    @Transactional
+    public UserAchievementDto verify(Long id, Long verifierId) {
+        UserAchievement ua = userAchievementRepository. findById(id).orElseThrow(() -> new NotFoundException("UserAchievement not found"));
+        ua.setVerifiedBy(verifierId);
+        UserAchievement updated = userAchievementRepository.save(ua);
+        return mapper.toDto(updated);
     }
 
     @Override
