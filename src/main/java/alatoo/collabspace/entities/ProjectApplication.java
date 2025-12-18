@@ -38,5 +38,7 @@ public class ProjectApplication {
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
         if (status == null) status = ApplicationStatus.PENDING;
+
+
     }
 }
