@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data. domain.Page;
 import org. springframework.data.domain.Pageable;
 import org.springframework. http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework. web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class SkillController {
     private final SkillService skillService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SkillDto> create(@RequestBody SkillDto dto) {
         return ResponseEntity.ok(skillService. create(dto));
     }
@@ -37,11 +39,13 @@ public class SkillController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SkillDto> update(@PathVariable Long id, @RequestBody SkillDto dto) {
         return ResponseEntity. ok(skillService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         skillService.delete(id);
         return ResponseEntity.noContent().build();

@@ -3,7 +3,9 @@ package alatoo.collabspace.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityFilter {
     private final JwtFilter jwtFilter;
     private static final String[] WHITE_LIST_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
@@ -26,7 +29,13 @@ public class SecurityFilter {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/achievements").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/skills").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/achievements/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/achievements/{id}").hasRole("ADMIN")                        .requestMatchers(HttpMethod.POST,   "/api/achievements").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/skills/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/skills/{id}").hasRole("ADMIN")
+
                         .requestMatchers(WHITE_LIST_URL).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

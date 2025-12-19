@@ -79,12 +79,11 @@ public class ProjectApplicationServiceImpl implements ProjectApplicationService 
         
         if ("ACCEPT".equalsIgnoreCase(action)) {
             app.setStatus(ApplicationStatus.ACCEPTED);
-            
-            // Автоматически создаём ProjectMember
+
             ProjectMember member = ProjectMember.builder()
                     .project(app.getProject())
                     .user(app.getUser())
-                    . roleInProject("Member") // дефолтная роль, можно передавать в запросе
+                    .roleInProject("Member")
                     .build();
             projectMemberRepository.save(member);
             
