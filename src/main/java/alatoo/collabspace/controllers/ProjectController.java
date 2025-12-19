@@ -9,6 +9,7 @@ import lombok. RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org. springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@projectSecurity.isProjectMember(#id) or hasRole('ADMIN')")
     public ResponseEntity<ProjectDto> get(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getById(id));
     }
@@ -40,27 +42,32 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<ProjectDto> update(@PathVariable Long id, @RequestBody ProjectDto dto) {
         return ResponseEntity.ok(projectService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         projectService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/complete")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<ProjectDto> complete(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.completeProject(id));
     }
 
     @GetMapping("/{id}/members")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<List<ProjectMemberDto>> getMembers(@PathVariable Long id) {
         return ResponseEntity.ok(projectService. getProjectMembers(id));
     }
 
     @GetMapping("/{id}/applications")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<List<ProjectApplicationDto>> getApplications(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectApplications(id));
     }
